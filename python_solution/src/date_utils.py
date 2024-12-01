@@ -1,15 +1,17 @@
 import logging
 
-from annotations import validate_dates
-from factory import HolidayFactory
-from holiday_counter import PublicHolidayCounter
+from src.validator import validate_dates
+from datetime import date
+from datetime import timedelta
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 NUMBER_OF_DAYS_IN_A_WEEK = 7
+WEEK_DAYS_RANGE = {0, 1, 2, 3, 4}  # Monday, Tuesday... Friday
+WEEKEND_DAYS_RANGE = {5, 6}
 
-class DayCalculator:
+class DayUtils:
     def __init__(self):
         pass
 
@@ -37,32 +39,32 @@ class DayCalculator:
         return (end_date - start_date).days -1
 
     @staticmethod
-    def remainder(total_days_count_between_dates):
+    def remainder(total_days):
         """
         Calculates the remainder when dividing the total number of days by the number of days in a week (7).
 
-        :param total_days_count_between_dates: int -> Total days between two dates
+        :param total_days: int -> Total days between two dates
         :return: int -> Remainder of the division
         """
-        logger.info("Calculating remainder for total_days_count_between_dates: %d", total_days_count_between_dates)
+        logger.info("Calculating remainder for total_days_count_between_dates: %d", total_days)
 
-        remainder_value = total_days_count_between_dates % NUMBER_OF_DAYS_IN_A_WEEK
+        remainder_value = total_days % NUMBER_OF_DAYS_IN_A_WEEK
         logger.info("Remainder calculated: %d", remainder_value)
 
         return remainder_value
 
     @staticmethod
-    def quotient(total_days_count_between_dates):
+    def quotient(total_days):
         """
         Calculates the quotient when dividing the total number of days by the number of days in a week (7).
         This value represents the number of full weeks within the given date range.
 
-        :param total_days_count_between_dates: int -> Total days between two dates
+        :param total_days: int -> Total days between two dates
         :return: int -> Quotient (number of full weeks)
         """
-        logger.info("Calculating quotient for total_days_count_between_dates: %d", total_days_count_between_dates)
+        logger.info("Calculating quotient for total_days_count_between_dates: %d", total_days)
 
-        quotient_value = total_days_count_between_dates // NUMBER_OF_DAYS_IN_A_WEEK
+        quotient_value = total_days // NUMBER_OF_DAYS_IN_A_WEEK
         logger.info("Quotient calculated: %d", quotient_value)
 
         return quotient_value
@@ -87,25 +89,25 @@ class DayCalculator:
         start_date_index = start_date.weekday()
 
         if remainder > 0:
-            remaining_weekend_days += self.remaining_weekend_days_count(start_date_index, remainder)
+            remaining_weekend_days += self.remaining_weekend_days_count(start_date_index, remainder, remaining_weekend_days)
 
         total_weekend_days = quotient * 2 + remaining_weekend_days
         logger.info("Total weekend days: %d", total_weekend_days)
         return total_weekend_days
 
     @staticmethod
-    def remaining_weekend_days_count(start_date_index, remainder):
+    def remaining_weekend_days_count(start_date_index, remainder, remaining_weekend_days):
         """
         Calculates the number of weekend days (Saturdays and Sundays) in the remaining days
         after full weeks have been considered.
 
         :param start_date_index: int -> The weekday index of the start date (0 = Monday, 6 = Sunday)
         :param remainder: int -> The number of days remaining after full weeks
+        :param remaining_weekend_days: int -> reference to keep value
+
         :return: int -> The count of weekend days (Saturdays and Sundays)
         """
         logger.info("Calculating remaining weekend days from start index: %d for remainder: %d days", start_date_index, remainder)
-
-        remaining_weekend_days = 0
 
         for i in range(1, remainder + 1):
             current_day = (start_date_index + i) % 7 # 6 + 0 =6 still in sunday
@@ -115,22 +117,6 @@ class DayCalculator:
 
         logger.info("Total remaining weekend days: %d", remaining_weekend_days)
         return remaining_weekend_days
-
-    def calculate_public_holidays_with_rules(self, start_date, end_date, holiday_rules):
-        """
-        Calculate the total number of public holidays in the range.
-
-        :param start_date: The start date of the range.
-        :param end_date: The end date of the range.
-        :param holiday_rules: Rules defining the holidays.
-        :return: Total number of public holidays.
-        """
-        logging.info(f"Generating holidays using rules: {holiday_rules}")
-        holiday_factory = HolidayFactory(start_date=start_date, end_date=end_date, holiday_rules=holiday_rules)
-        public_holiday_list = holiday_factory.generate_holiday()
-        public_holidays = self.calculate_public_holidays(start_date, end_date, public_holiday_list)
-        logging.info(f"Total public holidays between {start_date} and {end_date}: {public_holidays}")
-        return public_holidays
 
 
     @staticmethod
@@ -148,8 +134,65 @@ class DayCalculator:
         :rtype: int
         """
         logging.info(f"Filtering public holidays from the generated list.")
-        public_holidays = PublicHolidayCounter(
-            start_date=start_date, end_date=end_date, public_holiday_list=public_holiday_list
-        ).get_holiday_date()
+        public_holiday_days_total_count = 0
 
-        return public_holidays
+        for holiday in public_holiday_list:
+            if (holiday.weekday() in WEEK_DAYS_RANGE) and (start_date < holiday < end_date):
+                public_holiday_days_total_count += 1
+
+        return public_holiday_days_total_count
+
+
+    @staticmethod
+    def filter_date(start_date, original_date, end_date):
+        """
+        Filters a date based on whether it falls within a specified date range.
+
+        :param start_date: The start date of the range.
+        :param original_date: The date to check if it falls within the range.
+        :param end_date: The end date of the range.
+
+        :return: bool - True if the original date is within the range, False otherwise. Returns False if the original date is None.
+        """
+        return start_date <= original_date <= end_date if original_date else False
+
+    @staticmethod
+    def generates_dates_frequency_for_certain_period(start_date, period, month, day):
+        """
+        Generates a list of dates occurring on a specific month and day for a given number of years, starting from a given date.
+
+        :param start_date: The starting date to base the year calculation on.
+        :param period: The number of years after the start date to generate possible dates.
+        :param month: The month (as an integer) of the desired date.
+        :param day: The day (as an integer) of the desired date.
+
+        :return: list - A list of `date` objects representing the possible holiday dates.
+        """
+        possible_dates = []
+        for start_year in range(0, period + 1):
+            holiday_date = date(start_date.year + start_year, month, day)
+            possible_dates.append(holiday_date)
+        return possible_dates
+
+    @staticmethod
+    def generates_occurrence_dates_frequency_for_certain_period(start_date, period, month, day, occurrence):
+        """
+            Generates a list of dates occurring on a specific month and day for a given number of years, starting from a given date.
+
+            :param start_date: The starting date to base the year calculation on.
+            :param period: The number of years after the start date to generate possible dates.
+            :param month: The month (as an integer) of the desired date.
+            :param day: The day (as an integer) of the desired date.
+            :param occurrence: The occurrence number (e.g., 1st, 2nd, etc.)
+
+            :return: list - A list of `date` objects representing the possible holiday dates.
+            """
+        possible_holidays = []
+        for start_year in range(0, period + 1):
+            first_day_of_month = date(start_date.year + start_year, month, 1)
+            first_weekday_of_month = first_day_of_month.weekday()
+
+            day_offset = (day - first_weekday_of_month) % 7
+            nth_weekday_date = first_day_of_month + timedelta(days=day_offset + (occurrence - 1) * 7)
+            possible_holidays.append(nth_weekday_date)
+        return possible_holidays

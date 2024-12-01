@@ -9,6 +9,7 @@ def validate_dates(func):
     Annotation to validate the start_date and end_date parameters for a function.
     Ensures the following:
     - Both dates are of type datetime.date.
+    - Both dates are valid calendar dates.
     - The start_date is earlier than the end_date.
     If validation fails, a ValueError is raised or a default result of 0 is returned.
 
@@ -24,13 +25,19 @@ def validate_dates(func):
             logger.error("Invalid date types. Both start_date and end_date must be datetime.date objects.")
             raise ValueError("Both start_date and end_date must be of type datetime.date")
 
+        try:
+            datetime.date(start_date.year, start_date.month, start_date.day)
+            datetime.date(end_date.year, end_date.month, end_date.day)
+        except ValueError as e:
+            logger.error("Invalid calendar date: %s", e)
+            raise ValueError("Invalid calendar date")
+
         if start_date >= end_date:
             logger.warning("Invalid date range: start_date >= end_date. Returning 0.")
-            result = 0
-        else:
-            result = func(start_date, end_date)
-            logger.info("Valid date range. Proceeding with function execution.")
+            return 0
 
+        result = func(start_date, end_date)
         logger.info("Result after validation: %s", result)
         return result
+
     return wrapper

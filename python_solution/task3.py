@@ -1,7 +1,5 @@
-from day_calculator import DayCalculator
-from factory import HolidayFactory
-from holiday_counter import PublicHolidayCounter
-
+from python_solution.src.date_utils import DayUtils
+from python_solution.src.factory import HolidayFactory
 import datetime
 import logging
 
@@ -11,7 +9,7 @@ logging.basicConfig(
     filemode='a',  # Append to the file
 )
 
-class BusinessDayCounter(DayCalculator):
+class BusinessDayCounter:
     def __init__(self):
         super().__init__()
 
@@ -37,10 +35,17 @@ class BusinessDayCounter(DayCalculator):
         :return: Total number of business days.
         """
         logging.info(f"Calculating business days between {start_date} and {end_date}.")
-        total_days = self.days_count_between_dates(start_date=start_date, end_date=end_date)
-        total_weekend_days = self.total_weekend_days_count(start_date=start_date, total_days=total_days)
-        public_holidays = self.calculate_public_holidays_with_rules(start_date=start_date, end_date=end_date,
-                                                                    holiday_rules=holiday_rules)
+
+        date_utils = DayUtils()
+
+        total_days = date_utils.days_count_between_dates(start_date=start_date, end_date=end_date)
+        total_weekend_days = date_utils.total_weekend_days_count(start_date=start_date, total_days=total_days)
+
+        holiday_objects = HolidayFactory(start_date=start_date, end_date=end_date, holiday_rules=holiday_rules).get_objects()
+        public_holiday_list = [item for sublist in holiday_objects for item in sublist.get_holiday()]
+
+        public_holidays = date_utils.calculate_public_holidays(start_date=start_date, end_date=end_date,
+                                                                    public_holiday_list=public_holiday_list)
 
         total_business_days = total_days - total_weekend_days - public_holidays
 
@@ -90,8 +95,8 @@ if __name__ == '__main__':
     # end_date = datetime.date(2013, 10, 9)
 
     # 24th of December - 27th of December 0
-    start_date = datetime.date(2023, 4, 21)
-    end_date = datetime.date(2023, 4, 26)
+    start_date = datetime.date(2023, 6, 5)
+    end_date = datetime.date(2023, 6, 13)
 
 
     # 7th of October - 1st of October, 2024 4

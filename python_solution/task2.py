@@ -1,5 +1,5 @@
 
-from day_calculator import DayCalculator
+from day_utils import DayUtils
 from holiday_counter import PublicHolidayCounter
 
 import datetime
@@ -11,7 +11,7 @@ logging.basicConfig(
     filemode='a',  # Append to the file
 )
 
-class BusinessDayCounter(DayCalculator):
+class BusinessDayCounter(DayUtils):
     def __init__(self):
         super().__init__()
 

@@ -1,13 +1,13 @@
 import datetime
 import logging
 
-from day_calculator import DayCalculator
+from day_utils import DayUtils
 
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s')
 
-class BusinessDayCounter(DayCalculator):
+class BusinessDayCounter(DayUtils):
     def __init__(self):
         super().__init__()
 
