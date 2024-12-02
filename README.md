@@ -508,7 +508,7 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 #### 4. Running the all tasks at once 
 
 ```bash
-./run_all_task.sh
+./run_all_tasks.sh
 ```
 
 
