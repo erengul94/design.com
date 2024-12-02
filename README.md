@@ -523,6 +523,8 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 ### 2.2. Dotnet
 
 To run the .NET project, you can run all there tasks at once by just running Program.cs file. ( I think you know more than me :) )
+Just please make sure Microsoft.Extensions.Logging file is installed incase is not built in.
+
 
 - **Output Of Task 1, 2, 3**:
 
@@ -1284,6 +1286,6 @@ This interface is implemented by all holiday classes to ensure a uniform structu
 - **Add More Unit Tests**: Cover edge cases and ensure all holiday scenarios are thoroughly tested.
 - **Improve Code Comments and Logging**: Add more in-depth comments/logging for better readability, especially for complex methods.
 - **Cross-Platform Testing**: Ensure the Python and .NET code work seamlessly across different environments and versions. We can dockerize the projects.
-- **Connect the logging to alert based services**: Integrate to logging class to alert based services such as Sentry or Prometheus to monitor
+- **Connect and Customize the logging to alert based services**: Integrate to logging class to alert based services such as Sentry or Prometheus to monitor
 
 ---

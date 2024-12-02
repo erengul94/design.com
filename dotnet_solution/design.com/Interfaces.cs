@@ -36,4 +36,14 @@ public interface IHolidayFactoryInterface
     List<DateTime> GenerateDates(Dictionary<string, object> holidayRule);
 }
 
+
+// TODO: Planned to customize logger and inject the classes by using dependecy injection !!!
+public interface ILogger<T>
+    {
+        void LogInformation(string message);
+        void LogWarning(string message);
+        void LogError(string message, Exception exception = null);
+        void LogDebug(string message);
+    }
+
 }
