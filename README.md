@@ -98,8 +98,8 @@ python3 --version
     cd design.com/python_solution
     ```
     ```bash
-  export PYTHONPATH=$(pwd)
-  ```
+      export PYTHONPATH=$(pwd)
+    ```
 
 3. **Set Up a Virtual Environment**: It's recommended to use a virtual environment to manage dependencies. Create and activate one using the following commands:
 
@@ -728,6 +728,7 @@ Make sure you have installed the packages, incase if you have not;
 
 ```bash
   cd /design.com/python_solution/unit_tests
+  
 ```
 
 Run tests
