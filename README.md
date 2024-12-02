@@ -39,9 +39,9 @@ The `DayUtils` class provides utility methods for handling date manipulations, f
 
 ## 2. How Can I Run the Projects?
 
+### 2.1. Python
 
 ```markdown
-### 2.1. Python
 
 To run the Python project, follow these steps:
 
