@@ -95,7 +95,7 @@ python3 --version
 2. **Navigate to the Project Directory**: Open your terminal or command prompt and navigate to the project folder:
 
     ```bash
-    cd ~/design.com/python_solution
+    cd design.com/python_solution
     ```
 
 3. **Set Up a Virtual Environment**: It's recommended to use a virtual environment to manage dependencies. Create and activate one using the following commands:
@@ -108,8 +108,6 @@ python3 --version
     # For macOS/Linux
     source venv/bin/activate
 
-    # For Windows
-    .\venv\Scripts\activate
     ```
 
 4. **Install Project Dependencies**: The required dependencies are listed in the `requirements.txt` file. Install them by running:
@@ -128,7 +126,7 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 
 - **Run Task 1**:
     ```bash
-    python3 python_solution_task1.py
+    python3 task1.py
     ```
 - **Output Of Task 1**:
 ```
@@ -236,7 +234,7 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 
 - **Run Task 2**:
     ```bash
-    python3 python_solution_task2.py
+    python3 task2.py
     ```
 
 - **Output Of Task 2**:
@@ -359,7 +357,7 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 
 - **Run Task 3**:
     ```bash
-    python3 python_solution_task3.py
+    python3 task3.py
     ```
 - **Output Of Task 1**:
 
