@@ -724,7 +724,7 @@ Make sure you have installed the packages, incase if you have not;
 
 
 ```bash
-  cd /design.com/python_solution
+  cd /design.com/python_solution/unit_tests
   export PYTHONPATH=$(pwd)
 ```
 
