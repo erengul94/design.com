@@ -2,12 +2,12 @@
 
 1. [My Approach and Architecture of the Project](#1-my-approach-and-architecture-of-the-project)
 2. [How Can I Run the Projects?](#2-how-can-i-run-the-projects)
-    2.1. [Python](#21-Python)  
-    2.2. [Dotnet](#22-Dotnet)
+    - 2.1. [Python](#21-Python)  
+    - 2.2. [Dotnet](#22-Dotnet)
 3. [How Can I Run the Unittests?](#3-how-can-i-run-the-unittests)
 4. [Code Documentation](#4-code-documentation)
-    4.1. [Python](#41-python)  
-    4.2. [Dotnet](#42-dotnet)
+    - 4.1. [Python](#41-python)  
+    - 4.2. [Dotnet](#42-dotnet)
 5. [TODO's](#5-todos)
 
 ## 1. My Approach and Architecture of the Project
