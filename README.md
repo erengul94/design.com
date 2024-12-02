@@ -78,13 +78,46 @@ or if `python3` is the default:
 python3 --version
 ```
 
-#### 2. Set Up the Project Environment
+Here's the updated `README.md` file with the section on setting up the project environment and including the `requirements.txt` part:
+
+---
+
+### 2. Set Up the Project Environment
 
 1. **Clone or Download the Project**: Download or clone the project repository to your local machine.
+
+    ```bash
+    git clone https://github.com/yourusername/design.com.git
+    ```
+
 2. **Navigate to the Project Directory**: Open your terminal or command prompt and navigate to the project folder:
+
     ```bash
     cd ~/design.com/python_solution
     ```
+
+3. **Set Up a Virtual Environment**: It's recommended to use a virtual environment to manage dependencies. Create and activate one using the following commands:
+
+    ```bash
+    # Create a virtual environment
+    python3 -m venv venv
+
+    # Activate the virtual environment
+    # For macOS/Linux
+    source venv/bin/activate
+
+    # For Windows
+    .\venv\Scripts\activate
+    ```
+
+4. **Install Project Dependencies**: The required dependencies are listed in the `requirements.txt` file. Install them by running:
+
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+
+---
 
 
 #### 3. Running the Python Scripts
@@ -472,7 +505,7 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 
 
  
-#### 4. Running the all task at once 
+#### 4. Running the all tasks at once 
 
 ```bash
 ./run_all_task.sh
@@ -680,6 +713,32 @@ Business Days (Excluding Holidays): 2
 ## 3. How Can I Run the Unittests?
 
 ### Python Unittests
+	
+	Make sure you have installed the packages, incase if you have not;
+
+	```bash
+    pip install pytest
+    pip install mock
+
+
+    ```
+
+    ```python
+    cd /design.com/python_solution
+    export PYTHONPATH=$(pwd)
+
+    ```
+
+    Run tests
+
+     ```python
+     pytest test_validator.py
+     pytest test_business_day_counter.py
+     pytest test_task1.py
+     pytest test_task2.py
+     pytest test_task3.py
+
+    ```
 
 
 ### .NET Unittests
