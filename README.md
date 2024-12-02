@@ -82,8 +82,6 @@ or if `python3` is the default:
 python3 --version
 ```
 
-Here's the updated `README.md` file with the section on setting up the project environment and including the `requirements.txt` part:
-
 ---
 
 ### 2. Set Up the Project Environment
