@@ -1,7 +1,7 @@
 import unittest
 from datetime import datetime
 from unittest.mock import MagicMock
-from src.main import BusinessDayCounter
+from src.business_day_counter import BusinessDayCounter
 
 
 class TestBusinessDayCounter(unittest.TestCase):

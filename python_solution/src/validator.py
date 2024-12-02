@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 def validate_dates(func):
     """
-    Annotation to validate the start_date and end_date parameters for a function.
+    Validator to validate the start_date and end_date parameters for a function.
     Ensures the following:
     - Both dates are of type datetime.date.
     - Both dates are valid calendar dates.

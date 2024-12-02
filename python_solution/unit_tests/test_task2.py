@@ -1,7 +1,7 @@
 import unittest
 import logging
 from datetime import datetime
-from src.main import BusinessDayCounter
+from src.business_day_counter import BusinessDayCounter
 from unittest.mock import MagicMock
 
 # Configure logging

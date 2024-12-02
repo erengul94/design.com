@@ -13,7 +13,6 @@ namespace design.com
         }
 
 
-
         /// It uses a utility method to count the days, handling any invalid date ranges or exceptions that may arise.
         ///
         /// </summary>
@@ -21,7 +20,8 @@ namespace design.com
         /// <param name="endDate">The end date of the range.</param>
         /// <param name="totalDays">The current total days, to which the days between the start and end date will be added.</param>
         /// <returns>The updated total days after adding the calculated number of days between the two dates. Returns 0 if an exception occurs.</returns>
-        public int GetTotalDays(DateTime startDate, DateTime endDate, int totalDays){
+        public int GetTotalDays(DateTime startDate, DateTime endDate, int totalDays)
+        {
             try
             {
 
@@ -32,7 +32,7 @@ namespace design.com
                 endDate);
 
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
                 Console.WriteLine($"Exception occured while counting between days, invalid date range or invalid date entered {ex.Message}");
                 return 0;
@@ -54,13 +54,13 @@ namespace design.com
         public int GetHolidays(DateTime startDate, DateTime endDate, int publicHolidays,
         List<DateTime> publicHolidaysList = null, List<Dictionary<string, object>> holidayRules = null)
         {
-            if (publicHolidaysList != null) 
-              { 
-                publicHolidays += _dayUtils.CalculatePublicHolidays(startDate, endDate, publicHolidaysList); 
-                }
+            if (publicHolidaysList != null)
+            {
+                publicHolidays += _dayUtils.CalculatePublicHolidays(startDate, endDate, publicHolidaysList);
+            }
             if (holidayRules != null)
-            {   
-                List<IHolidayFactoryInterface> holidayObjects = new HolidayFactory(startDate: startDate, endDate: endDate, holidayRules: holidayRules).GetObjects();                
+            {
+                List<IHolidayFactoryInterface> holidayObjects = new HolidayFactory(startDate: startDate, endDate: endDate, holidayRules: holidayRules).GetObjects();
                 List<DateTime> publicHolidayListGeneratedByRules = holidayObjects
                     .SelectMany(sublist => sublist.GetHoliday())
                     .ToList();
@@ -87,9 +87,9 @@ namespace design.com
             Console.WriteLine($"Calculating weekdays between {startDate} and {endDate}.");
 
             int totalDays = 0;
-            
-            totalDays += GetTotalDays(startDate:startDate, endDate:endDate, totalDays:totalDays);
-            if (totalDays == 0){return 0;}
+
+            totalDays += GetTotalDays(startDate: startDate, endDate: endDate, totalDays: totalDays);
+            if (totalDays == 0) { return 0; }
 
             int totalWeekendDays = _dayUtils.TotalWeekendDaysCount(startDate, totalDays);
             int totalWeekdays = totalDays - totalWeekendDays;
@@ -117,25 +117,37 @@ namespace design.com
             int totalDays = 0;
             int publicHolidays = 0;
 
-            totalDays += GetTotalDays(startDate:startDate, endDate:endDate, totalDays:totalDays);
-            if (totalDays == 0){return 0;}
-            
+            totalDays += GetTotalDays(startDate: startDate, endDate: endDate, totalDays: totalDays);
+            if (totalDays == 0) { return 0; }
+
             int totalWeekendDays = _dayUtils.TotalWeekendDaysCount(startDate, totalDays);
 
-            publicHolidays += GetHolidays(startDate: startDate, 
-                                                          endDate: endDate, 
-                                                          publicHolidays: publicHolidays,
-                                                          publicHolidaysList: publicHolidaysList, 
-                                                          holidayRules: holidayRules);
+            try
+            {
+                publicHolidays += GetHolidays(startDate: startDate,
+                                                 endDate: endDate,
+                                                 publicHolidays: publicHolidays,
+                                                 publicHolidaysList: publicHolidaysList,
+                                                 holidayRules: holidayRules);
+                int totalBusinessDays = totalDays - totalWeekendDays - publicHolidays;
 
-            int totalBusinessDays = totalDays - totalWeekendDays - publicHolidays;
+                Console.WriteLine($"Total days: {totalDays}, Weekend days: {totalWeekendDays}, Business: {totalBusinessDays}");
 
-            Console.WriteLine($"Total days: {totalDays}, Weekend days: {totalWeekendDays}, Business: {totalBusinessDays}");
+                return totalBusinessDays;
 
-            return totalBusinessDays;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred while calculating holidays:");
+                Console.WriteLine($"Message: {ex.Message}");
+                return 0;
+            }
+
+
+
         }
-    
-    
-    
+
+
+
     }
 }

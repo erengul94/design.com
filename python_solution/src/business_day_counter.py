@@ -46,7 +46,7 @@ class BusinessDayCounter:
                                                                    public_holiday_list=public_holiday_list)
         if holiday_rules:
             holiday_objects = HolidayFactory(start_date=start_date, end_date=end_date,
-                                                 holiday_rules=holiday_rules).get_objects()
+                                                     holiday_rules=holiday_rules).get_objects()
 
             public_holiday_generated_by_rules = [item for sublist in holiday_objects for item in sublist.get_holiday()]
             public_holidays += self.day_utils_obj.calculate_public_holidays(start_date=start_date, end_date=end_date,
@@ -90,10 +90,14 @@ class BusinessDayCounter:
         if total_days == 0: return 0
 
         total_weekend_days = self.day_utils_obj.total_weekend_days_count(start_date=start_date, total_days=total_days)
-        public_holidays += self.get_holidays(start_date=start_date, end_date=end_date, public_holidays=public_holidays,
-                                             public_holiday_list=public_holiday_list, holiday_rules=holiday_rules)
-        total_business_days = total_days - total_weekend_days - public_holidays
+        try:
+            public_holidays += self.get_holidays(start_date=start_date, end_date=end_date, public_holidays=public_holidays,
+                                                 public_holiday_list=public_holiday_list, holiday_rules=holiday_rules)
+            total_business_days = total_days - total_weekend_days - public_holidays
+            logging.info(f"Total days: {total_days}, Weekend days: {total_weekend_days}, Business: {total_business_days}")
 
-        logging.info(f"Total days: {total_days}, Weekend days: {total_weekend_days}, Business: {total_business_days}")
+            return total_business_days
 
-        return total_business_days
+        except Exception as e:
+            logger.error(e)
+            return 0

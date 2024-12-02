@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System;
-
+﻿using System.Collections.Generic;
 
 namespace design.com
 {
@@ -11,48 +9,104 @@ namespace design.com
             DayUtils dayUtils = new DayUtils();
             BusinessDayCounter businessDayCounter = new BusinessDayCounter(dayUtils);
 
-            //TASK1
-            // DateTime startDate = new DateTime(2013, 10, 7);
-            // DateTime endDate = new DateTime(2013, 10, 9);
+            // Task 1: Calculate weekdays between two dates
+            Task1(businessDayCounter);
 
-            // DateTime startDate = new DateTime(2013, 10, 5);
-            // DateTime endDate = new DateTime(2013, 10, 14);
+            // Task 2: Calculate business days between two dates considering public holidays
+            Task2(businessDayCounter);
 
-            // DateTime startDate = new DateTime(2013, 10, 7);
-            // DateTime endDate = new DateTime(2014, 1, 1);
+            // Task 3: Calculate business days between two dates considering specific holiday rules
+            Task3(businessDayCounter);
+        }
 
-            // int weekdays = businessDayCounter.WeekdaysBetweenTwoDates(startDate, endDate);
-            // Console.WriteLine($"Weekdays between {startDate.ToShortDateString()} and {endDate.ToShortDateString()}: {weekdays}");
-            // Console.WriteLine("Hello world");
+        // Task 1: Weekdays between two dates
+        static void Task1(BusinessDayCounter businessDayCounter)
+        {
+            try
+            {
+                var startEndDateList = new List<(DateTime startDate, DateTime endDate)>
+                    {
+                        (new DateTime(2013, 10, 7), new DateTime(2013, 10, 9)), // Result must be 1
+                        (new DateTime(2013, 10, 5), new DateTime(2013, 10, 14)), // Result must be 5
+                        (new DateTime(2013, 10, 7), new DateTime(2014, 1, 1)),  // Result must be 61
+                        (new DateTime(2013, 10, 5), new DateTime(2013, 10, 7))  // Result must be 0
+                    };
+                Console.WriteLine(new string('=', 50));
+                Console.WriteLine("Task 1: Week Days");
+                Console.WriteLine(new string('=', 50));
 
-            // TASK2
-                DateTime firstPublicHoliday = new DateTime(2013, 12, 25);  // 25th December 2013
-                DateTime secondPublicHoliday = new DateTime(2013, 12, 26); // 26th December 2013
-                DateTime thirdPublicHoliday = new DateTime(2014, 1, 1);    // 1st January 2014
+                foreach (var (startDate, endDate) in startEndDateList)
+                {
+                    int weekdays = businessDayCounter.WeekdaysBetweenTwoDates(startDate, endDate);
+                    Console.WriteLine(new string('-', 50));
+                    Console.WriteLine($"Start Date : {startDate.ToShortDateString()}");
+                    Console.WriteLine($"End Date   : {endDate.ToShortDateString()}");
+                    Console.WriteLine($"Week Days (Excluding Holidays): {weekdays}");
+                    Console.WriteLine(new string('-', 50));
+                }
 
-                // Adding the public holidays to a list
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Environment.Exit(1); // This stops the application with an error code.
+            }
+
+        }
+
+        // Task 2: Business days between two dates considering public holidays
+        static void Task2(BusinessDayCounter businessDayCounter)
+        {
+
+            try
+            {
+                // Define the list of public holidays
                 List<DateTime> publicHolidaysList = new List<DateTime>
+                {
+                    new DateTime(2013, 12, 25),  // 25th December 2013
+                    new DateTime(2013, 12, 26), // 26th December 2013
+                    new DateTime(2014, 1, 1)    // 1st January 2014
+                };
+
+
+                // Define a list of start and end dates
+                var startEndDateList = new List<(DateTime startDate, DateTime endDate)>
+                {
+                    (new DateTime(2013, 10, 7), new DateTime(2013, 10, 9)), // Result must be 1
+                    (new DateTime(2013, 12, 24), new DateTime(2013, 12, 27)), // Result must be 0
+                    (new DateTime(2013, 10, 7), new DateTime(2014, 1, 1))  // Result must be 59
+                };
+
+                Console.WriteLine(new string('=', 50)); // Separator line
+                Console.WriteLine("Task 2: Business Days with Holiday List of Holidays");
+                Console.WriteLine(new string('=', 50));
+
+                foreach (var (startDate, endDate) in startEndDateList)
+                {
+                    int businessDays = businessDayCounter.BusinessDaysBetweenTwoDates(startDate: startDate, endDate: endDate, publicHolidaysList: publicHolidaysList);
+                    Console.WriteLine(new string('-', 50));
+                    Console.WriteLine($"Start Date : {startDate.ToShortDateString()}");
+                    Console.WriteLine($"End Date   : {endDate.ToShortDateString()}");
+                    Console.WriteLine($"Business Days (Excluding Holidays): {businessDays}");
+                    Console.WriteLine(new string('-', 50));
+                }
+
+            }
+            catch (ArgumentOutOfRangeException ex)
             {
-                firstPublicHoliday,
-                secondPublicHoliday,
-                thirdPublicHoliday
-            };
-            // DateTime startDate = new DateTime(2013, 10, 7);
-            // DateTime endDate = new DateTime(2013, 10, 9);
+                Console.WriteLine($"Error: {ex.Message}");
+                Environment.Exit(1); // This stops the application with an error code.
 
-            // DateTime startDate = new DateTime(2013, 12, 24);
-            // DateTime endDate = new DateTime(2013, 12, 27);
+            }
 
-            DateTime startDate = new DateTime(2013, 10, 7);
-            DateTime endDate = new DateTime(2014, 1, 1);
-            int weekdays = businessDayCounter.BusinessDaysBetweenTwoDates(startDate:startDate, endDate:endDate, publicHolidaysList : publicHolidaysList);
+        }
 
-
-
-            //TASK 3
-
+        // Task 3: Business days between two dates considering specific holiday rules
+        static void Task3(BusinessDayCounter businessDayCounter)
+        {
+            // Define the holiday rules
             var holidayRules = new List<Dictionary<string, object>>
-            {
+    {
                 new Dictionary<string, object>
                 {
                     { "holiday_type", "public_holiday" },
@@ -76,23 +130,42 @@ namespace design.com
                     { "occurrence", 2 }
                 }
             };
-            // DateTime startDate = new DateTime(2013, 10, 7);
-            // DateTime endDate = new DateTime(2013, 10, 9);
 
-            // DateTime startDate = new DateTime(2013, 12, 24);
-            // DateTime endDate = new DateTime(2013, 12, 27);
+            
+            try
+            {
+                var startEndDateList = new List<(DateTime startDate, DateTime endDate)>
+                {
+                    (new DateTime(2022, 12, 26), new DateTime(2023, 1, 3)), // Result must be 4 # "New Year's Day case"
+                    (new DateTime(2023, 4, 20), new DateTime(2023, 4, 27)), //Result must be 3 # for "Anzac Day case"
+                    (new DateTime(2023, 6, 9), new DateTime(2023, 6, 15)) //Result must be 2 # for  "Queen's Birthday case"
+                };
 
-            // DateTime startDate = new DateTime(2013, 10, 7);
-            // DateTime endDate = new DateTime(2014, 1, 1);
+                Console.WriteLine(new string('=', 50));
+                Console.WriteLine("Task 3: Business Days with Holiday Rules");
+                Console.WriteLine(new string('=', 50));
 
-            // DateTime startDate = new DateTime(2023, 4, 20);
-            // DateTime endDate = new DateTime(2023, 4, 26);
+                foreach (var (startDate, endDate) in startEndDateList)
+                {
+                    int businessDays = businessDayCounter.BusinessDaysBetweenTwoDates(startDate: startDate, endDate: endDate, holidayRules: holidayRules);
 
-            // int weekdays = businessDayCounter.BusinessDaysBetweenTwoDates(startDate: startDate, endDate: endDate, holidayRules: holidayRules);
+                    Console.WriteLine(new string('-', 50));
+                    Console.WriteLine($"Start Date : {startDate.ToShortDateString()}");
+                    Console.WriteLine($"End Date   : {endDate.ToShortDateString()}");
+                    Console.WriteLine($"Business Days (Excluding Holidays): {businessDays}");
+                    Console.WriteLine(new string('-', 50));
+                }
 
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                Environment.Exit(1);
+            }
 
-            // Console.WriteLine($"Weekdays between {startDate.ToShortDateString()} and {endDate.ToShortDateString()}: {weekdays}");
         }
 
     }
 }
+
+
