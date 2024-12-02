@@ -478,7 +478,6 @@ If you want to run multiple Python scripts (e.g., task-specific scripts), you ca
 ./run_all_task.sh
 ```
 
-This will execute the main Python script of the project, based on your project’s structure.
 
 ---
 
@@ -684,7 +683,7 @@ Business Days (Excluding Holidays): 2
 
 
 ### .NET Unittests
-I have not enough time to write unittest in .net, having a limited of time. I hope that show you have knowledge about unittests by writing the unittests in python.
+I have not enough time to write unittest in .net, since having a limited of time. I hope that show you have knowledge about unittests by writing the unittests in python.
 
 ## 4. Code Documentation
 
@@ -1226,6 +1225,6 @@ This interface is implemented by all holiday classes to ensure a uniform structu
 - **Add More Unit Tests**: Cover edge cases and ensure all holiday scenarios are thoroughly tested.
 - **Improve Code Comments and Logging**: Add more in-depth comments/logging for better readability, especially for complex methods.
 - **Cross-Platform Testing**: Ensure the Python and .NET code work seamlessly across different environments and versions. We can dockerize the projects.
-- **Connect the logging to alert based services**: Integrate to logging class to alert based services such as Sentry or Prometheus the monitor
+- **Connect the logging to alert based services**: Integrate to logging class to alert based services such as Sentry or Prometheus to monitor
 
 ---
