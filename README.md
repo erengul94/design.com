@@ -713,32 +713,28 @@ Business Days (Excluding Holidays): 2
 ## 3. How Can I Run the Unittests?
 
 ### Python Unittests
-	
-	Make sure you have installed the packages, incase if you have not;
+Make sure you have installed the packages, incase if you have not;
 
-	```bash
-    pip install pytest
-    pip install mock
+```bash
+  pip install pytest
+  pip install mock
+  ```
 
 
-    ```
+```bash
+  cd /design.com/python_solution
+  export PYTHONPATH=$(pwd)
+```
 
-    ```python
-    cd /design.com/python_solution
-    export PYTHONPATH=$(pwd)
+Run tests
 
-    ```
-
-    Run tests
-
-     ```python
-     pytest test_validator.py
-     pytest test_business_day_counter.py
-     pytest test_task1.py
-     pytest test_task2.py
-     pytest test_task3.py
-
-    ```
+```bash
+  pytest test_validator.py
+  pytest test_business_day_counter.py
+  pytest test_task1.py
+  pytest test_task2.py
+  pytest test_task3.py
+```
 
 
 ### .NET Unittests
