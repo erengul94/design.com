@@ -91,7 +91,7 @@ Here's the updated `README.md` file with the section on setting up the project e
 1. **Clone or Download the Project**: Download or clone the project repository to your local machine.
 
     ```bash
-    git clone https://github.com/yourusername/design.com.git
+    git clone https://github.com/erengul94/design.com.git
     ```
 
 2. **Navigate to the Project Directory**: Open your terminal or command prompt and navigate to the project folder:
